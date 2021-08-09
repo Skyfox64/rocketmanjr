@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e97ed3749d0f87fb855be13b4f21f0daf2942836ac84a582799548ad2c425249"
+            "sha256": "09adc43634eae9429384c6abd43299b721aedf091aeb07d8b62860a81b61bece"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -34,11 +34,11 @@
         },
         "dnspython": {
             "hashes": [
-                "sha256:95d12f6ef0317118d2a1a6fc49aac65ffec7eb8087474158f42f26a639135216",
-                "sha256:e4a87f0b573201a0f3727fa18a516b055fd1107e0e5477cded4a2de497df1dd4"
+                "sha256:36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01",
+                "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"
             ],
             "index": "pypi",
-            "version": "==2.1.0"
+            "version": "==1.16.0"
         },
         "flask": {
             "hashes": [
@@ -55,14 +55,6 @@
             ],
             "index": "pypi",
             "version": "==3.0.10"
-        },
-        "flask-pymongo": {
-            "hashes": [
-                "sha256:620eb02dc8808a5fcb90f26cab6cba9d6bf497b15032ae3ca99df80366e33314",
-                "sha256:8a9577a2c6d00b49f21cb5a5a8d72561730364a2d745551a85349ab02f86fc73"
-            ],
-            "index": "pypi",
-            "version": "==2.3.0"
         },
         "itsdangerous": {
             "hashes": [
@@ -129,6 +121,10 @@
             "version": "==3.13.0"
         },
         "pymongo": {
+            "extras": [
+                "srv",
+                "tls"
+            ],
             "hashes": [
                 "sha256:02dc0b0f48ed3cd06c13b7e31b066bf91e00dac5f8147b0a0a45f9009bfab857",
                 "sha256:053b4ebf91c7395d1fcd2ce6a9edff0024575b7b2de6781554a4114448a8adc9",
@@ -229,6 +225,7 @@
                 "sha256:fe5872ce6f9627deac8314bdffd3862624227c3de4c17ef0cc78bbf0402999eb",
                 "sha256:ffbae429ba9e42d0582d3ac63fdb410338892468a2107d8ff68228ec9a39a0ed"
             ],
+            "index": "pypi",
             "version": "==3.12.0"
         },
         "six": {

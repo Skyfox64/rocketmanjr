@@ -6,10 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 marshmallow = "*"
+wheel = "*"
 flask-cors = "*"
 dnspython = "*"
-wheel = "*"
-flask-pymongo = "*"
+pymongo = {extras = ["srv", "tls"], version = "*"}
 
 [dev-packages]
 

@@ -1,0 +1,26 @@
+{
+  "rocket": {
+      "height": 18.000,
+      "mass": 12000.000,
+      "stage1" : {
+          "engine1" : {
+              "thrust": 9.493,
+              "isp": 12.156
+          },
+          "engine2" : {
+              "thrust": 9.413,
+              "isp": 11.632
+          },
+          "engine3" : {
+              "thrust": 9.899,
+              "isp": 12.551
+          }
+      },
+      "stage2" : {
+          "engine1" : {
+              "thrust": 1.622,
+              "isp": 15.110
+          }
+      }
+  }
+}

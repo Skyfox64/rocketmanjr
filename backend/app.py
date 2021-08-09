@@ -2,74 +2,90 @@
 
 import click
 import json
-
+import datetime as dt
+from pprint import pprint 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from database import Database
-
-# from .entities.entity import Session, engine, Base
-# from .entities.exam import Exam, ExamSchema
+from schemas import *
 
 # creating the Flask application
 app = Flask(__name__)
 CORS(app) # Cross-Origin Resource Sharing
 
-# Database Credentials and Connection 
-# It would be better to store in a secure configuration management system.
 # Tie our application to the MongoDB Instance
-password = "MzpaSczwcOYRXjan"
-connectionString = f'mongodb+srv://dbUser:{password}@cluster0.rx0dh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-app.config["MONGO_URI"] = connectionString
-Database.initialize(app)
+Database.initialize()
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5000)
   app.run(debug=True)
 
+#"flask initdb" in CLI to refresh and seed the database.
 @app.cli.command()
 def initdb():
-  """Initialize the database."""
-  click.echo('Init the db')
-  # Loading or Opening the json file
-  with open('database_seed.json') as file:
-    file_data = json.load(file)
-  Database.refresh_db() # wipe the collection
-  Database.seed_db(file_data) # seed the collection as desired
+  try:
+    """Initialize the database."""
+    click.echo('Initializing the db')
+    # Loading or Opening the json file
+    with open('database_seed.json') as file:
+      file_data = json.load(file)
+
+    # add created_at datetime's to each node (JSON Object) of the seed structure
+    created_time = dt.datetime.now()
+    formatted_created_time = created_time.isoformat()
+    # # Because I know the seed data, I can do this.. But it feels a little hacky to me.
+    # file_data['Rocket'].append(formatted_created_time)
+    # file_data['Stage1'].append(formatted_created_time)
+    # file_data['Engine1'].append(formatted_created_time)
+    # file_data['Engine2'].append(formatted_created_time)
+    # file_data['Engine3'].append(formatted_created_time)
+    # file_data['Stage2'].append(formatted_created_time)
+    # file_data['Engine1'].append(formatted_created_time)
+
+    # Could add date to every object
+
+    # Load json into ORM - Marshmallow
+    # schema = RocketSchema()
+    # result = schema.load(file_data)
+    # pprint(result)
+
+    # Serialize json
+
+
+    Database.refresh_db() # wipe the collection
+    Database.seed_db(file_data) # seed the collection as desired
+  except:
+    click.echo('db seed failed')
+
+  else:
+    click.echo('db seed successful')
 
 #All the routings in our app will be mentioned here.
 @app.route('/test')
 def test():
-  return "This Flask App is running"
+  return "This App is running"
 
-# @app.route('/exams')
-# def get_exams():
-#     # fetching from the database
-#     session = Session()
-#     exam_objects = session.query(Exam).all()
+@app.route('/user')
+def user():
+  user_data = {
+      "email": "ken@yahoo.com",
+      "name": "Ken"
+  }
+  schema = UserSchema()
+  result = schema.load(user_data)
+  pprint(result)
+  # {'name': 'Ken',
+  #  'email': 'ken@yahoo.com'},
 
-#     # transforming into JSON-serializable objects
-#     schema = ExamSchema(many=True)
-#     exams = schema.dump(exam_objects)
+@app.route('/seed')
+def seed():
+  # with open('./backend/database_seed.json', "r") as file:
+  with open('./backend/database_seed.json') as file:
+    # file_data = json.load(file)
+    json_obj = json.load(file)
+    # json_obj = json.load(file)
+    # file_data = file
 
-#     # serializing as JSON
-#     session.close()
-#     return jsonify(exams.data)
-
-
-# @app.route('/exams', methods=['POST'])
-# def add_exam():
-#     # mount exam object
-#     posted_exam = ExamSchema(only=('title', 'description'))\
-#         .load(request.get_json())
-
-#     exam = Exam(**posted_exam.data, created_by="HTTP post request")
-
-#     # persist exam
-#     session = Session()
-#     session.add(exam)
-#     session.commit()
-
-#     # return created exam
-#     new_exam = ExamSchema().dump(exam).data
-#     session.close()
-#     return jsonify(new_exam), 201
+  # Load json into ORM - Marshmallow
+  schema = RootSchema()
+  result = schema.load(json_obj)
+  pprint(result)
