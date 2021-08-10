@@ -21,7 +21,7 @@ Database.initialize()
 
 # Run
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(debug=True, use_reloader=True)
 
 #"flask initdb" in CLI to refresh and seed the database.
 @app.cli.command()
@@ -98,14 +98,15 @@ def get_node(subpath=None):
     for doc in documents:
       json_resp[doc["id"]] = resolve_node(doc)
 
-    print(json_resp)
-    return json_resp
+    # print(json_resp)
+    return jsonify(json_resp)
 
   except Exception as e: 
     # NOTE: Would add proper error handling with more time
     click.echo('get node failed')
     click.echo(e)
 
+# Determines if: Node traversal or returns property
 def resolve_node(document):
   json_resp = {}
   if "is_node" in document and document["is_node"]:
@@ -116,11 +117,12 @@ def resolve_node(document):
     json_resp = document["property"]
   return json_resp
 
-def retrieve_sub_tree(document, tree=[]):
+# Retrieves sub_tree from node
+def retrieve_sub_tree(document):
   json_resp = {}
   query = {"parent": document["id"]}
-  # print("retrieve_sub_tree - Query: ", query)
   documents = Database.load_from_db(query)
   for doc in documents:
     json_resp[doc["id"]] = resolve_node(doc)
   return json_resp
+

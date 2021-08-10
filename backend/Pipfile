@@ -10,6 +10,7 @@ wheel = "*"
 flask-cors = "*"
 dnspython = "*"
 pymongo = {extras = ["srv", "tls"], version = "*"}
+pytest = "*"
 
 [dev-packages]
 

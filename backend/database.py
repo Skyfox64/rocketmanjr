@@ -61,5 +61,5 @@ class Database:
     return cls.database.rockets.find(query)
 
   @classmethod
-  def load_node_from_db(cls, query):
+  def load_one_from_db(cls, query):
     return cls.database.rockets.find_one(query)
