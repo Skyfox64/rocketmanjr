@@ -3,11 +3,11 @@
 import click
 import json
 import datetime as dt
+from markupsafe import escape
 from pprint import pprint 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from database import Database
-from schemas import *
 
 # creating the Flask application
 app = Flask(__name__)
@@ -29,28 +29,6 @@ def initdb():
     with open('database_seed.json') as file:
       file_data = json.load(file)
 
-    # add created_at datetime's to each node (JSON Object) of the seed structure
-    created_time = dt.datetime.now()
-    formatted_created_time = created_time.isoformat()
-    # # Because I know the seed data, I can do this.. But it feels a little hacky to me.
-    # file_data['Rocket'].append(formatted_created_time)
-    # file_data['Stage1'].append(formatted_created_time)
-    # file_data['Engine1'].append(formatted_created_time)
-    # file_data['Engine2'].append(formatted_created_time)
-    # file_data['Engine3'].append(formatted_created_time)
-    # file_data['Stage2'].append(formatted_created_time)
-    # file_data['Engine1'].append(formatted_created_time)
-
-    # Could add date to every object
-
-    # Load json into ORM - Marshmallow
-    # schema = RocketSchema()
-    # result = schema.load(file_data)
-    # pprint(result)
-
-    # Serialize json
-
-
     Database.refresh_db() # wipe the collection
     Database.seed_db(file_data) # seed the collection as desired
   except:
@@ -64,28 +42,43 @@ def initdb():
 def test():
   return "This App is running"
 
-@app.route('/user')
-def user():
-  user_data = {
-      "email": "ken@yahoo.com",
-      "name": "Ken"
-  }
-  schema = UserSchema()
-  result = schema.load(user_data)
-  pprint(result)
-  # {'name': 'Ken',
-  #  'email': 'ken@yahoo.com'},
-
-@app.route('/seed')
+@app.route('/seed', methods=['GET'])
 def seed():
-  # with open('./backend/database_seed.json', "r") as file:
-  with open('./backend/database_seed.json') as file:
-    # file_data = json.load(file)
-    json_obj = json.load(file)
-    # json_obj = json.load(file)
-    # file_data = file
+  try:
+    """Seed DB."""
+    with open('./backend/database_seed.json') as file:
+      file_data = json.load(file)
 
-  # Load json into ORM - Marshmallow
-  schema = RootSchema()
-  result = schema.load(json_obj)
-  pprint(result)
+    Database.refresh_db() # wipe the collection
+    Database.seed_db(file_data) # seed the collection as desired
+    
+  except Exception as e: 
+    # NOTE: Would add proper error handling with more time
+    click.echo(e)
+    click.echo('seed failed')
+  
+  else:
+    click.echo('seed successful')
+
+
+@app.route('/Rocket/', methods=['GET'], strict_slashes=False)
+@app.route('/Rocket/<path:subpath>', methods=['GET'], strict_slashes=False)
+def getNode(subpath=None):
+  try:
+    """Get Node."""
+    if subpath:
+      # query using the subpath after /Rocket/
+      node = Database.load_from_db()
+
+      return f'Subpath {escape(subpath)}'
+    else:
+      node = Database.load_node_from_db({ "id": "Rocket"})['node']
+      return jsonify(node)
+
+  except Exception as e: 
+    # NOTE: Would add proper error handling with more time
+    click.echo(e)
+    click.echo('get node failed')
+
+  else:
+    click.echo('get node successful')
