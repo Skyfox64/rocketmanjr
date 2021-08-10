@@ -1,39 +1,39 @@
 {
-  "Rocket": {
-      "Name": "Rocket",
-      "Height": 18.000,
-      "Mass": 12000.000,
-      "Stages": [
-          {
-              "Name": "Stage1",
-              "Engines" : [
-                  {
-                      "Name": "Engine1", 
-                      "Thrust": 9.493,
-                      "ISP": 12.156
-                  },
-                  {
-                      "Name": "Engine2",
-                      "Thrust": 9.413,
-                      "ISP": 11.632
-                  },
-                  {
-                      "Name": "Engine2",
-                      "Thrust": 9.899,
-                      "ISP": 12.551
-                  }
-              ]
-          },
-          {
-              "Name": "Stage2",
-              "Engines" : [
-                  {
-                      "Name": "Engine1", 
-                      "Thrust": 1.622,
-                      "ISP": 15.110
-                  }
-              ]
-          }
-      ]
-  }
+    "Rocket": {
+        "Name": "Rocket",
+        "Height": 18.000,
+        "Mass": 12000.000,
+        "Stages": [
+            {
+                "Name": "Stage1",
+                "Engines" : [
+                    {
+                        "Name": "Engine1", 
+                        "Thrust": 9.493,
+                        "ISP": 12.156
+                    },
+                    {
+                        "Name": "Engine2",
+                        "Thrust": 9.413,
+                        "ISP": 11.632
+                    },
+                    {
+                        "Name": "Engine2",
+                        "Thrust": 9.899,
+                        "ISP": 12.551
+                    }
+                ]
+            },
+            {
+                "Name": "Stage2",
+                "Engines" : [
+                    {
+                        "Name": "Engine1", 
+                        "Thrust": 1.622,
+                        "ISP": 15.110
+                    }
+                ]
+            }
+        ]
+    }
 }
