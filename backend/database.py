@@ -1,5 +1,6 @@
 import datetime as dt
 from pymongo import MongoClient
+from pymongo.collection import ReturnDocument
 from api_helper import ApiHelper
 
 class Database:
@@ -13,12 +14,12 @@ class Database:
     cls.database = mongodb_client.db
 
   @classmethod
-  def refresh_db(cls):
+  def wipe_db(cls):
     cls.database.rockets.drop()
 
   @classmethod
   def seed_db_directly(cls, data):
-    # Inserting the loaded data in the Collection
+    # Inserting the loaded data in the 'Rockets' Collection
     # if JSON data contains more than one entry, insert_many is used 
     # else insert_one is used
     if isinstance(data, list):
@@ -27,7 +28,7 @@ class Database:
       cls.database.rockets.insert_one(data)
 
   @classmethod
-  def seed_db(cls, data):
+  def seed_db(cls, data, verbose):
     for path, node in ApiHelper.traverse(data):
       id, ancestors, parent = ApiHelper.get_node_ancestry(path)
 
@@ -45,7 +46,8 @@ class Database:
       else:
         document["is_node"] = True
 
-      # print("document:", document)
+      if verbose:
+        print("Document:", document)
       cls.save_to_db(document)
 
   @classmethod
@@ -54,7 +56,15 @@ class Database:
 
   @classmethod
   def save_to_db(cls, data):
-    cls.database.rockets.insert_one(data)
+    return cls.database.rockets.insert_one(data)
+
+  @classmethod
+  def update_in_db(cls, query, data):
+    # return cls.database.rockets.find_one_and_update(data)
+    return cls.database.rockets.find_one_and_update(
+                            query,
+                            { '$set': data }, 
+                            return_document = ReturnDocument.AFTER)
 
   @classmethod
   def load_from_db(cls, query):

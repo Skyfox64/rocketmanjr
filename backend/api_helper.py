@@ -1,5 +1,4 @@
 
-
 class ApiHelper:
   @classmethod
   def traverse(self, dict_or_list, path=[]):
@@ -21,8 +20,3 @@ class ApiHelper:
     if ancestors:
       parent = ancestors[-1]
     return id, ancestors, parent
-    
-  # @classmethod
-  # def build_node(cls, data):
-  #   node
-  #   return node
