@@ -9,6 +9,7 @@ import { SearchInputComponent } from './search-input/search-input.component';
 import { ClientSwitchmapComponent } from './client-switchmap/client-switchmap.component';
 import { RocketApiService } from './shared/rocket-api.service';
 import { PrettyPrintPipe } from './pretty-print/pretty-print.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PrettyPrintPipe } from './pretty-print/pretty-print.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     RocketApiService
