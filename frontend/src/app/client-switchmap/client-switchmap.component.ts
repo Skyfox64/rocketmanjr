@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { empty, EMPTY, Observable, of, Subject } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { RocketApiService, RocketResult } from '../shared/rocket-api-service.service';
+import { RocketApiService, RocketResult, Node } from '../shared/rocket-api.service';
 
 @Component({
   selector: "app-client-switchmap",
@@ -10,11 +10,13 @@ import { RocketApiService, RocketResult } from '../shared/rocket-api-service.ser
 })
 export class ClientSwitchmapComponent {
   searchTerm = new Subject<string>();
-  results$ = this.searchTerm.pipe(
+  results$: Observable<Node[]> = this.searchTerm.pipe(
     switchMap(searchTerm => {
-      return this.RocketApiService.getResults(searchTerm).pipe(
-        catchError((error) => of(null)))
-    })
+      return this.RocketApiService.getResults(searchTerm)
+        // .pipe(
+        //   catchError(() => EMPTY)
+        // )
+    }),
   );
 
   constructor(private RocketApiService: RocketApiService) {}

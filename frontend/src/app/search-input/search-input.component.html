@@ -1,6 +1,21 @@
-<input
-  type="text"
-  placeholder="Enter your search term..."
-  [value]="initialValue"
-  (input)="onInput($event)"
-/>
+<div id="content" class="search-box">
+  <input 
+    #searchinput
+    id="searchinput"
+    name="input"
+    type="text"
+    class="input"
+    [placeholder]="expanded ? 'Enter your search term...' : ''"
+    [value]="initialValue"
+    [class.square]="expanded"
+    (input)="onInput($event)"
+  >
+  <button
+    #searchbtn
+    id="searchbtn"
+    type="reset"
+    class="search"
+    [class.close]="expanded"
+    (click)="toggleClass($event)"
+  ></button>
+</div>

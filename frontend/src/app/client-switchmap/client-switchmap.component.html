@@ -1,8 +1,12 @@
-<!-- <h2>Client using SwitchMap pattern</h2> -->
-<app-search-input (textChange)="onTextChange($event)"></app-search-input>
+<!-- <h2 style="color: white;">Client using SwitchMap pattern</h2> -->
+<ng-container>
+	<app-search-input (textChange)="onTextChange($event)"></app-search-input>
+</ng-container>
 <ng-container *ngIf="(results$ | async) as results">
 	<!-- {{results | json}} -->
-	<pre [innerHTML]="results | prettyprint"></pre>
+	<div class="container" style="color: white;">
+		<pre [innerHTML]="results | prettyprint"></pre>
+	</div>
 	<!-- <ol *ngIf="results.results.length > 0; else noResults">
 		<li *ngFor="let item of results.results">
 			{{item}}

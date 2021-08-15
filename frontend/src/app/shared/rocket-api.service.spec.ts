@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RocketApiServiceService } from './rocket-api-service.service';
+import { RocketApiService } from './rocket-api.service';
 
 describe('RocketApiServiceService', () => {
-  let service: RocketApiServiceService;
+  let service: RocketApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RocketApiServiceService);
+    service = TestBed.inject(RocketApiService);
   });
 
   it('should be created', () => {

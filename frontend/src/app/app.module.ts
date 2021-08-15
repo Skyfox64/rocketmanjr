@@ -7,8 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { SearchInputComponent } from './search-input/search-input.component';
 import { ClientSwitchmapComponent } from './client-switchmap/client-switchmap.component';
-import { RocketApiService } from './shared/rocket-api-service.service';
-import { PrettyPrintPipe } from './pretty-print.pipe';
+import { RocketApiService } from './shared/rocket-api.service';
+import { PrettyPrintPipe } from './pretty-print/pretty-print.pipe';
 
 @NgModule({
   declarations: [
