@@ -23,6 +23,14 @@
             "jinja": true
         },
         {
+            "name": "Debug Angular Program",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/helloworld.ts",
+            "preLaunchTask": "tsc: build - ./frontend/tsconfig.json",
+            "outFiles": ["${workspaceFolder}/out/**/*.js"]
+        },
+        {
             "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",

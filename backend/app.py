@@ -12,7 +12,10 @@ from database import Database
 
 # Creating the Flask application
 app = Flask(__name__)
-CORS(app) # Cross-Origin Resource Sharing
+CORS(app) # Allow Cross-Origin Resource Sharing (CORS)
+# NOTE: During the development process, this configuration will be enough. 
+# However, in the future, you will probably want to be more restrictive
+# Reference: https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 
 # Tie our application to the MongoDB Instance
 Database.initialize()
@@ -85,6 +88,10 @@ def get_node(subpath=None):
   try:
     """Get Node."""
 
+    # Return the created time of a node/property 
+    # (i.e. /Rocket/Stage2?timestamp=true)
+    with_timestamp = request.args.get("timestamp", default=False, type=bool)
+
     id = "Rocket"
     ancestors = []
     parent = None
@@ -107,7 +114,7 @@ def get_node(subpath=None):
     document = Database.load_one_from_db(query)
     json_resp = {}
     if document:
-      json_resp[document["id"]] = resolve_document(document)
+      json_resp[document["id"]] = resolve_document(document, with_timestamp)
 
     if json_resp:
       # jsonify applies the appropriate mimetype through it's response
@@ -218,22 +225,32 @@ def create_node(path, query):
     return f"Error creating new node at path: {csv_path}", 500
 
 # Determines if document is a Node a Property and returns
-def resolve_document(document):
+def resolve_document(document, with_timestamp):
   json_resp = {}
+
   if "is_node" in document and document["is_node"]:
     # Return the node
-    json_resp = retrieve_sub_tree(document)
+    if with_timestamp:
+      json_resp["subtree"] = retrieve_sub_tree(document, with_timestamp)
+      json_resp["created_at"] = document["created_at"]
+    else:
+      json_resp = retrieve_sub_tree(document, with_timestamp)
   else:
     # Return the property
-    json_resp = document["property"]
+    if with_timestamp:
+      json_resp["value"] = document["property"] # Value of the property
+      json_resp["created_at"] = document["created_at"] # Time item created
+    else:
+      json_resp = document["property"]
+
   return json_resp
 
 # Retrieves sub_tree from node
-def retrieve_sub_tree(node):
+def retrieve_sub_tree(node, with_timestamp):
   json_resp = {}
   query = {"parent": node["id"]}
   documents = Database.load_from_db(query)
   for doc in documents:
-    json_resp[doc["id"]] = resolve_document(doc)
+    json_resp[doc["id"]] = resolve_document(doc, with_timestamp)
   return json_resp
 

@@ -1,0 +1,14 @@
+<h2>Client using SwitchMap pattern</h2>
+
+<app-search-input (textChange)="onTextChange($event)"></app-search-input>
+<ng-container *ngIf="(results$ | async) as results">
+	{{results | json}}
+	<!-- <ol *ngIf="results.results.length > 0; else noResults">
+		<li *ngFor="let item of results.results">
+			{{item}}
+		</li>
+	</ol> -->
+	<ng-template #noResults>
+		No results
+	</ng-template>
+</ng-container>
