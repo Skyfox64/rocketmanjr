@@ -12,20 +12,20 @@
   <div mat-dialog-actions>
     <button
       mat-button
-      (click)="handleDialogSubmit()"
       mat-raised-button
       color="primary"
+      (click)="handleDialogConfirm()"
       [disabled]="stateService.isAsyncOperationRunning$ | async"
     >
       {{ dialogData.confirmButtonLabel }}
     </button>
     <button
       mat-button
-      cdkFocusInitial
-      (click)="closeDialog()"
-      [disabled]="stateService.isAsyncOperationRunning$ | async"
       mat-raised-button
       color="accent"
+      (click)="onNoClick()"
+      cdkFocusInitial
+      [disabled]="stateService.isAsyncOperationRunning$ | async"
     >
       {{ dialogData.cancelButtonLabel }}
     </button>

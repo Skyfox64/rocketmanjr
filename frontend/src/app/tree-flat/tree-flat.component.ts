@@ -1,10 +1,13 @@
 // Reference: https://stackblitz.com/edit/simplified-material-tree-with-virtual-scroll
 
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {Component, Injectable, ViewChild, AfterViewInit, Input} from '@angular/core';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
-import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { Component, ViewChild, AfterViewInit, Input, NgZone } from '@angular/core';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Observable, of as observableOf } from 'rxjs';
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { DialogComponent } from '../shared/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogInterface } from '../shared/interfaces/dialog';
 
 /**
  * Tree node data with nested structure.
@@ -29,7 +32,8 @@ export class TreeFlatNode {
 }
 
 /**
- * The tree's structure data in string. The data could be parsed into a Json object
+ * The tree's structure data in string. 
+ * The data could be parsed into a Json object
  */
   const something = [
     {
@@ -79,8 +83,12 @@ export class TreeFlatComponent implements AfterViewInit {
 
   @Input() treedata: string = ""; 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll!: CdkVirtualScrollViewport; 
+  public dialogSubmissionMessage: string = '';
 
-  constructor() {
+  constructor(
+    public dialog: MatDialog,
+    private ngZone: NgZone
+    ) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,
       this._isExpandable, this._getChildren);
     this.treeControl = new FlatTreeControl<TreeFlatNode>(this._getLevel, this._isExpandable);
@@ -88,6 +96,20 @@ export class TreeFlatComponent implements AfterViewInit {
     // this.dataSource.data = this.fullDatasource.slice(0, 10);
     this.dataSource.data = [];
   }
+
+  private _getLevel = (node: TreeFlatNode) => node.level;
+
+  private _isExpandable = (node: TreeFlatNode) => node.expandable;
+
+  private _getChildren = (node: TreeNode): Observable<TreeNode[]> => observableOf(node.children);
+
+  hasChild = (_: number, _nodeData: TreeFlatNode) => _nodeData.expandable;
+
+  transformer = (node: TreeNode, level: number) => {
+    return new TreeFlatNode(
+      node.nodename, level, node.created_at, !!node.children, node.value);
+  }
+  
   objToTreeNode(oldObj: any): TreeNode[] {
     let newObj = this.traverse(oldObj);
     
@@ -147,18 +169,25 @@ export class TreeFlatComponent implements AfterViewInit {
     return obj
   }
 
-  transformer = (node: TreeNode, level: number) => {
-    return new TreeFlatNode(
-      node.nodename, level, node.created_at, !!node.children, node.value);
+  openDialog() {
+    const dialogInterface: DialogInterface = {
+      dialogHeader: 'Confirm Deletion',
+      dialogContent: 'Are you sure you wish to proceed?',
+      cancelButtonLabel: 'Cancel',
+      confirmButtonLabel: 'Delete',
+      callbackMethod: () => {
+        // null
+        console.log("Deleted")
+        // this.performDialogSubmitMethodOne();
+      },
+    };
+    this.ngZone.run(() => {
+      this.dialog.open(DialogComponent, {
+        width: '300px',
+        data: dialogInterface,
+      });
+    }, 500);
   }
-
-  private _getLevel = (node: TreeFlatNode) => node.level;
-
-  private _isExpandable = (node: TreeFlatNode) => node.expandable;
-
-  private _getChildren = (node: TreeNode): Observable<TreeNode[]> => observableOf(node.children);
-
-  hasChild = (_: number, _nodeData: TreeFlatNode) => _nodeData.expandable;
 
   ngAfterViewInit() {
     this.virtualScroll.renderedRangeStream.subscribe(range => {
