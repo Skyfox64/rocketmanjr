@@ -176,9 +176,7 @@ export class TreeFlatComponent implements AfterViewInit {
       cancelButtonLabel: 'Cancel',
       confirmButtonLabel: 'Delete',
       callbackMethod: () => {
-        // null
         console.log("Deleted")
-        // this.performDialogSubmitMethodOne();
       },
     };
     this.ngZone.run(() => {
