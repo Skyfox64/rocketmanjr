@@ -150,33 +150,33 @@ export class TreeFlatComponent implements AfterViewInit {
     // this.dataSource.data = this.fullDatasource.slice(0, 10);
     this.dataSource.data = [];
   }
-  jsonToTreeNode(oldJsonObj: any): TreeNode {
+  jsonToTreeNode(oldJsonObj: any): TreeNode[] {
+    // let newObj = this.process(oldJsonObj);
     let newObj = this.traverse(oldJsonObj);
+    
     console.log(newObj);
-    let newTreeNode = newObj as TreeNode;
+    let newTreeNode = [newObj] as TreeNode[];
     return newTreeNode;
   }
 
   //called with every property and its value
-  process(value: any) {
-    // console.log(key + " : " + value);
-    console.log(value[0] + " : " + value[1]);
-
-    let nodeName = value[0]
-    let created_at = new Date(value[1].created_at);
-    let children = [];
-    if (value[1].hasOwnProperty('subtree')) {
-      children = this.traverse(value[1].subtree);
-      // children = this.processrse(value[1].subtree);
-    }
+  process(obj: any) {
     let newNode = {}
+    let obj_value = obj[1]
+    let nodeName = obj[0]
+    let created_at = new Date(obj_value.created_at);
+    let children: any[] = [];
     
-    if (value !== null &&
-      typeof value === 'object' && 
-      value[1].hasOwnProperty('subtree')) {
+    if (obj_value !== null && typeof obj_value === 'object' && 
+    obj_value.hasOwnProperty('subtree')) {
       // if object of subtree, return nodename, created_at, value
       // children = this.traverse(value[1].subtree)
-
+      let subtree = obj_value.subtree
+      Object.keys(subtree).forEach(key => {
+        // let x = {...this.process([key,subtree[key]])}
+        let x = this.process([key,subtree[key]])
+        children.push(x);
+      });
       newNode = {
         nodename: nodeName,
         created_at: created_at,
@@ -184,15 +184,16 @@ export class TreeFlatComponent implements AfterViewInit {
       };
 
     }
-    else {
+    if (obj_value !== null && obj_value.hasOwnProperty('value')) {
       // if value is not object, return 
       // nodename, created_at, children(empty), value
+      // if (obj_value !== null && obj_value.hasOwnProperty('value')) {
       newNode = {
         nodename: nodeName,
         created_at: created_at,
-        children: [],
-        value: value[1].value
+        value: obj_value.value
       };
+
     }
 
     return newNode;
@@ -201,23 +202,7 @@ export class TreeFlatComponent implements AfterViewInit {
   traverse(o: any): any {
     let obj = {}
     for (var i in o) {
-      // obj = this.process([i,o[i]])
-      if (o[i] !== null && typeof(o[i]) === "object"
-      // ) {
-        && o[i].hasOwnProperty('subtree')) {
-        obj = this.process([i,o[i]])
-        // obj = {
-        //   ...this.process(this,[i,o[i]]),
-        //   ...o
-        // }
-        //going one step down in the object tree!!
-        // this.traverse(o[i],func);
-        // obj = {
-        //   // ...this.traverse(o[i]),
-        //   ...obj
-        // }
-      // }
-      }
+      obj = this.process([i,o[i]]);
     }
 
     return obj
@@ -239,7 +224,10 @@ export class TreeFlatComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.virtualScroll.renderedRangeStream.subscribe(range => {
       // console.log(range, 'range')
-      this.fullDatasource = [this.jsonToTreeNode(this.treedata)];
+      this.fullDatasource = [...this.jsonToTreeNode(this.treedata)];
+      // this.fullDatasource = [
+      //   ...something2
+      // ]
       this.dataSource.data = this.fullDatasource.slice(range.start, range.end)
       // this.dataSource.data = [this.jsonToTreeNode(this.treedata)];
     })
