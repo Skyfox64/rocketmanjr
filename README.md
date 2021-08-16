@@ -48,7 +48,7 @@ Frontend
   - Component B
     - My first primitive implementation to speed along development was to simply "pretty-print" the json.
       - https://stackblitz.com/edit/angular-prettyprint?file=src%2Fapp%2Fapp.component.html
-    - To achieve a tree hierarchy data structure with conditional coloring, 'Delete' button, and 'date' pipe, I knew the implementation would need a more involved rendering
+    - To achieve a tree hierarchy data structure with conditional coloring, 'Delete' button, and 'date' pipe, I knew the implementation would need a more involved rendering.
     - I looked into mat-tree or Material Tree for Angular.
     - I also looked into a performant way to render using virtual-scroll which would show the limited data, cache, and if the user wanted to see it again, it would retrieve from cache, as opposed to creating it again.
 
