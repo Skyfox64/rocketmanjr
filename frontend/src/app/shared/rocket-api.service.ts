@@ -3,38 +3,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
-import {API_URL} from '../../environments/environment';
-
-type DateString = string; // "2014-12-09T13:50:51.644000Z"
-
-export interface RocketResult {
-  value: number;
-  node: string;
-  created: DateString;
-}
+import { API_URL } from '../../environments/environment';
 
 export interface RocketResultItem {}
-
-export interface Node {
-  id: number;
-  created_at: DateString;
-}
-
-export interface Property {
-  id: number;
-  created_at: DateString;
-  value: number;
-}
 
 @Injectable()
 export class RocketApiService {
   constructor(private httpClient: HttpClient) {}
 
-  getResults(searchTerm: string): Observable<Node[]> {
-    return this.httpClient.get<Node[]>(API_URL + "/" + searchTerm +"?timestamp=true")
+  getResults(searchTerm: string): Observable<string> {
+    // return this.httpClient.get<string>(API_URL + "/" + searchTerm)
+    return this.httpClient.get<string>(API_URL + "/" + searchTerm +"?timestamp=true")
       .pipe(
         // catchError(() => EMPTY)
-        catchError(this.handleError<Node[]>('getResults', []))
+        catchError(this.handleError<string>('getResults', ''))
       );
   }
 

@@ -55,6 +55,9 @@ export class SearchInputComponent implements OnInit, OnDestroy {
     if (!this.expanded) {
       this.handleClear();
     }
+    else {
+      this.searchInput.nativeElement.focus();
+    }
   }
 
   handleClear(){

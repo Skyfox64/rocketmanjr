@@ -3,15 +3,15 @@
 	<app-search-input (textChange)="onTextChange($event)"></app-search-input>
 </ng-container>
 <ng-container *ngIf="(results$ | async) as results">
+	<!-- Material Tree output -->
+	<app-tree-flat [treedata]="results"></app-tree-flat>
+
+	<!-- Primitive/Basic JSON output below -->
 	<!-- {{results | json}} -->
 	<div class="container" style="color: white;">
+		<!-- *ngIf="results.length === 0 noResults"> -->
 		<pre [innerHTML]="results | prettyprint"></pre>
 	</div>
-	<!-- <ol *ngIf="results.results.length > 0; else noResults">
-		<li *ngFor="let item of results.results">
-			{{item}}
-		</li>
-	</ol> -->
 	<ng-template #noResults>
 		No results
 	</ng-template>
