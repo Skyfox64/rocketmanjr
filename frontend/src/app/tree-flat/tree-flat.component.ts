@@ -33,68 +33,6 @@ export class TreeFlatNode {
  */
   const something = [
     {
-      nodename: 'Applications (1)',
-      children: [
-        { nodename: 'Calendar',value: 'app' },
-        { nodename: 'Chrome', value: 'app' },
-        { nodename: 'Webstorm', value: 'app'},
-      ],
-    },
-    {
-      nodename: 'Documents (2)',
-      children: [
-        {
-          nodename: 'angular',
-          children: [
-            {
-              nodename: 'src', 
-              children: [
-                { nodename: 'compiler',value: 'ts' },
-                { nodename: 'core', value: 'ts' },
-              ],
-            },
-          ],
-        }, {
-          nodename: 'material2 (3)',
-          children: [
-            {
-              nodename: 'src',
-              children: [
-                { nodename: 'button',value: 'ts' },
-                { nodename: 'checkbox', value: 'ts' },
-                { nodename: 'input',value: 'ts' },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      nodename: 'Downloads (4)',
-      children: [
-        { nodename: 'October', value: 'pdf' },
-        { nodename: 'November', value: 'pdf' },
-        { nodename: 'Tutorial', value: 'html' },
-      ],
-    },
-    {
-      nodename: 'Pictures (5)',
-      children: [
-        {
-          nodename: 'Photo Booth Library',
-          children: [
-            { nodename: 'Contents', value: 'dir' },
-            { nodename: 'Pictures', value: 'dir' },
-          ],
-        },
-        { nodename: 'Sun', value: 'png' },
-        { nodename: 'Woods', value: 'jpg' },
-      ],
-    },
-  ] as TreeNode[];
-
-  const something2 = [
-    {
       nodename: 'Rocket',
       created_at: new Date(),
       children: [
@@ -134,9 +72,9 @@ export class TreeFlatComponent implements AfterViewInit {
   //     ...something, ...something, ...something,
   //     ...something, ...something, ...something,
   //     ...something, ...something, ...something,
-  //     ].map((item, index)=>{return {...item, nodename: 'this is item '+index}})
+  //     ]
   fullDatasource = [
-    ...something2
+    ...something
   ]
 
   @Input() treedata: string = ""; 
@@ -150,11 +88,10 @@ export class TreeFlatComponent implements AfterViewInit {
     // this.dataSource.data = this.fullDatasource.slice(0, 10);
     this.dataSource.data = [];
   }
-  jsonToTreeNode(oldJsonObj: any): TreeNode[] {
-    // let newObj = this.process(oldJsonObj);
-    let newObj = this.traverse(oldJsonObj);
+  objToTreeNode(oldObj: any): TreeNode[] {
+    let newObj = this.traverse(oldObj);
     
-    console.log(newObj);
+    // console.log(newObj);
     let newTreeNode = [newObj] as TreeNode[];
     return newTreeNode;
   }
@@ -165,18 +102,21 @@ export class TreeFlatComponent implements AfterViewInit {
     let obj_value = obj[1]
     let nodeName = obj[0]
     let created_at = new Date(obj_value.created_at);
-    let children: any[] = [];
     
+    // At this point, it's either subtree or value per node
+    // Branch or Leaf
+    // Branches have a subtree, Leaves have a value
     if (obj_value !== null && typeof obj_value === 'object' && 
     obj_value.hasOwnProperty('subtree')) {
-      // if object of subtree, return nodename, created_at, value
-      // children = this.traverse(value[1].subtree)
+      // if subtree, return nodename, created_at, value
+
       let subtree = obj_value.subtree
+      let children: any[] = [];
       Object.keys(subtree).forEach(key => {
-        // let x = {...this.process([key,subtree[key]])}
         let x = this.process([key,subtree[key]])
         children.push(x);
       });
+
       newNode = {
         nodename: nodeName,
         created_at: created_at,
@@ -184,10 +124,9 @@ export class TreeFlatComponent implements AfterViewInit {
       };
 
     }
-    if (obj_value !== null && obj_value.hasOwnProperty('value')) {
-      // if value is not object, return 
-      // nodename, created_at, children(empty), value
-      // if (obj_value !== null && obj_value.hasOwnProperty('value')) {
+    else if (obj_value !== null && obj_value.hasOwnProperty('value')) {
+      // if value, return nodename, created_at, value
+
       newNode = {
         nodename: nodeName,
         created_at: created_at,
@@ -224,12 +163,8 @@ export class TreeFlatComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.virtualScroll.renderedRangeStream.subscribe(range => {
       // console.log(range, 'range')
-      this.fullDatasource = [...this.jsonToTreeNode(this.treedata)];
-      // this.fullDatasource = [
-      //   ...something2
-      // ]
+      this.fullDatasource = [...this.objToTreeNode(this.treedata)];
       this.dataSource.data = this.fullDatasource.slice(range.start, range.end)
-      // this.dataSource.data = [this.jsonToTreeNode(this.treedata)];
     })
     // this.treeControl.expandAll();
   }

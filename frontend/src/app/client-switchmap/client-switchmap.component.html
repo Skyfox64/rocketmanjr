@@ -2,13 +2,15 @@
 <ng-container>
 	<app-search-input (textChange)="onTextChange($event)"></app-search-input>
 </ng-container>
+<br>
 <ng-container *ngIf="(results$ | async) as results">
 	<!-- Material Tree output -->
 	<app-tree-flat [treedata]="results"></app-tree-flat>
 
 	<!-- Primitive/Basic JSON output below -->
 	<!-- {{results | json}} -->
-	<div class="container" style="color: white;">
+	<div style="color: white;">
+		<h2>Raw JSON from API</h2>
 		<!-- *ngIf="results.length === 0 noResults"> -->
 		<pre [innerHTML]="results | prettyprint"></pre>
 	</div>

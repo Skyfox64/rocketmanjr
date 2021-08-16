@@ -8,17 +8,23 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatGridListModule } from '@angular/material/grid-list';
+
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { TimeAgoPipe } from 'time-ago-pipe';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { SearchInputComponent } from './search-input/search-input.component';
 import { ClientSwitchmapComponent } from './client-switchmap/client-switchmap.component';
 import { PrettyPrintPipe } from './pretty-print/pretty-print.pipe';
 import { TreeFlatComponent } from './tree-flat/tree-flat.component';
+import { DialogComponent } from './shared/dialog/dialog.component';
 
 import { RocketApiService } from './shared/rocket-api.service';
 import { MessageTimePipe } from './MessageTime/message-time.pipe';
@@ -31,6 +37,7 @@ import { MessageTimePipe } from './MessageTime/message-time.pipe';
     PrettyPrintPipe,
     TreeFlatComponent,
     MessageTimePipe,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,11 +47,17 @@ import { MessageTimePipe } from './MessageTime/message-time.pipe';
 
     CdkTableModule,
     CdkTreeModule,
+    ScrollingModule,
+
+    FormsModule,
     MatGridListModule,
-    MatButtonModule,
     MatTreeModule,
     MatIconModule,
-    ScrollingModule
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     RocketApiService

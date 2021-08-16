@@ -22,4 +22,14 @@ describe('TreeFlatComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('\'s values should be green', () => {
+    const span: HTMLElement = fixture.nativeElement
+      .querySelector(
+        'mat-tree-node > span:nth-child(3)'
+      );
+    const bgColor = span.style.color;
+    expect(bgColor).toBe('green');
+  });
+
 });
