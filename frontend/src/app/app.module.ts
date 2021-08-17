@@ -69,7 +69,7 @@ import { StateService } from './shared/state.service';
   ],
   providers: [
     RocketApiService,
-    StateService
+    StateService,
   ],
   bootstrap: [AppComponent]
 })

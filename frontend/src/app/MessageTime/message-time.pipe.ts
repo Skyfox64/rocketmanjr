@@ -13,7 +13,7 @@ interface intervals {
 };
 
 @Pipe({
-    name: 'dateAgo',
+    name: 'messagetime',
     pure: true
 })
 export class MessageTimePipe implements PipeTransform {

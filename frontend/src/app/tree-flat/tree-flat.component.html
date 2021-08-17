@@ -1,19 +1,18 @@
 <cdk-virtual-scroll-viewport itemSize="48" style="height: 600px;">
   <ng-container *cdkVirtualFor="let item of fullDatasource"></ng-container>
-  <div style="padding: 10px; color: white;">
-    {{ dialogSubmissionMessage }}
-  </div>
   <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
       <button mat-icon-button disabled></button>
       <span>{{node.nodename}} : </span>
-      <span
+      <div
+        id="property"
+        class="property"
         [style.color]="node.value > 10 ? 'green' : null"
       >
         &nbsp;{{node.value}}
-      </span>
+      </div>
       <span style="color: #e4bcee; font-size: 0.8rem">
-        &nbsp;&nbsp; created {{node.created_at | dateAgo}}
+        &nbsp;&nbsp; created {{node.created_at | messagetime}}
       </span>
       <div style="padding: 10px; margin-left: auto;">
         <button mat-raised-button (click)="openDialog()" color="primary">Delete</button>
@@ -29,7 +28,7 @@
       </button>
       {{node.nodename}}
       <span style="color: #e4bcee; font-size: 0.8rem">
-        &nbsp;&nbsp; created {{node.created_at | dateAgo}}
+        &nbsp;&nbsp; created {{node.created_at | messagetime}}
       </span>
       <div style="padding: 10px; margin-left: auto;">
         <button mat-raised-button (click)="openDialog()" color="primary">Delete</button>

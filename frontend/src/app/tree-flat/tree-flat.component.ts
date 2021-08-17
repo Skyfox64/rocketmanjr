@@ -1,12 +1,12 @@
 // Reference: https://stackblitz.com/edit/simplified-material-tree-with-virtual-scroll
 
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ViewChild, AfterViewInit, Input, NgZone } from '@angular/core';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable, of as observableOf } from 'rxjs';
+import { Component, ViewChild, AfterViewInit, Input, NgZone } from '@angular/core';
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { DialogComponent } from '../shared/dialog/dialog.component';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 import { DialogInterface } from '../shared/interfaces/dialog';
 
 /**
@@ -45,16 +45,7 @@ export class TreeFlatNode {
         { 
           nodename: 'Stage1',
           created_at: new Date(),
-          children: [
-            // { 
-            //   nodename: 'Engine1',
-            //   created_at: new Date(),
-            //   children: [ 
-            //     { nodename: 'ISP',value:15.11,created_at: new Date()},
-            //     { nodename: 'Thrust',value:1.6,created_at: new Date()},
-            //   ]
-            // }
-          ]
+          children: []
         },
       ]
     }
@@ -83,14 +74,13 @@ export class TreeFlatComponent implements AfterViewInit {
 
   @Input() treedata: string = ""; 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll!: CdkVirtualScrollViewport; 
-  public dialogSubmissionMessage: string = '';
 
   constructor(
     public dialog: MatDialog,
     private ngZone: NgZone
     ) {
-    this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,
-      this._isExpandable, this._getChildren);
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer, this._getLevel, this._isExpandable, this._getChildren);
     this.treeControl = new FlatTreeControl<TreeFlatNode>(this._getLevel, this._isExpandable);
     this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     // this.dataSource.data = this.fullDatasource.slice(0, 10);
