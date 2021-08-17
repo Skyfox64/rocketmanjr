@@ -2,24 +2,40 @@
 Simple Angular + Flask + MongoDB Application with some CRUD operations
 
 - Instructions on how to run each part of the challenge.
+  *Note: '>' is the start of a terminal command
+  
     Instructions for running the application.
-    1. Unpack gitbundle.
-        pipenv shell
-    2. Seed the database (backend)
-        cd backend
-        flask initdb -v
-    3. Run Python Flask application (backend)
-        cd backend
-        python app.py run
+    1. Install software resources:
+      - install python
+      - install node
+    2. Unpack zip
+      - Review the gitbundle 'project.bundle' if you are interested in that type of thing.
+        - Good for reviewing this project's git commit history
+    3. Seed the database (backend)
+      > cd backend
+      > pipenv shell
+      > flask initdb -v
+    4. Run Python Flask application (backend)
+      > cd backend
+        - Since this app hasn't reached production yet, let's run it in development mode
+        - Set the flask environment (https://flask.palletsprojects.com/en/2.0.x/debugging/#:~:text=To%20enable%20the%20debugger%2C%20run,enables%20the%20debugger%20and%20reloader.)
+          Bash: $ export FLASK_ENV=development
+          CMD: set FLASK_ENV=development
+          Powershell: > $env:FLASK_ENV = "development"
+      > python -m flask run --host=127.0.0.1 --port=5050 
+        - Navigate to http://localhost:5050/test to verify app is running
         - Test backend by running command: 
-          pytest -v
-    4. Run Angular application (frontend)
-        cd frontend
-        ng serve --open
+          > pytest -v
+    5. Run Angular application (frontend)
+      > cd frontend
+      > ng serve --open
+        - Test frontend by running command:
+          > ng test
         - Test Component B property's green-ness:
-          ng test --include='**\tree-flat.component.spec.ts'
-    5. Navigate to localhost:4200 in your preferred browser if the previous command does not bring up the app. 
-    6. Enjoy using the simple app!
+          > ng test --include='**\tree-flat.component.spec.ts'
+    6. Navigate to http://localhost:4200/ in your preferred browser if 'ng serve --open' does not bring up the app. 
+    7. Enjoy using the simple app!
+
 
 
 
